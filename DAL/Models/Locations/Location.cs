@@ -18,5 +18,5 @@ public class Location
 
     public DateOnly? ExistedTo { get; set; }
 
-    public virtual House? House { get; set; } = null!;
+    public virtual House? House { get; set; }
 }
