@@ -1,5 +1,5 @@
 ﻿namespace BLL.DTOs.LivingCreatures;
-internal class CharacterDTO
+public class CharacterDTO
 {
     public Guid Id { get; set; }
 

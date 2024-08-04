@@ -1,6 +1,6 @@
 ﻿namespace BLL.DTOs.LivingCreatures;
 
-internal class GenderDTO
+public class GenderDTO
 {
     public Guid Id { get; set; }
 

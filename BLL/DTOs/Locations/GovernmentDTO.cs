@@ -1,6 +1,6 @@
 ﻿namespace BLL.DTOs.Locations;
 
-internal class GovernmentDTO
+public class GovernmentDTO
 {
     public Guid Id { get; set; }
 

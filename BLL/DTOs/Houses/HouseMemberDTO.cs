@@ -1,6 +1,6 @@
 ﻿namespace BLL.DTOs.Houses;
 
-internal class HouseMemberDTO
+public class HouseMemberDTO
 {
     public Guid Id { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace BLL.DTOs.LivingCreatures;
 
-internal class PetOwnerDTO
+public class PetOwnerDTO
 {
     public Guid Id { get; set; }
 

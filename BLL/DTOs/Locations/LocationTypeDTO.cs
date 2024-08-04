@@ -1,6 +1,6 @@
 ﻿namespace BLL.DTOs.Locations;
 
-internal class LocationTypeDTO
+public class LocationTypeDTO
 {
     public Guid Id { get; set; }
 

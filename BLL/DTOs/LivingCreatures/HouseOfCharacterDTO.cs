@@ -2,7 +2,7 @@
 
 namespace BLL.DTOs.LivingCreatures;
 
-internal class HouseOfCharacterDTO
+public class HouseOfCharacterDTO
 {
     public Guid Id { get; set; }
 
