@@ -13,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<ILocationTypeService, LocationTypeService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
