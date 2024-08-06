@@ -20,6 +20,16 @@ public class AutoMapperProfiles : Profile
                 Name = x.House.Name,
                 CrestPicture = x.House.CrestPicture
             }));
-        CreateMap<AddLocationDTO, Location>();
+        CreateMap<AddLocationDTO, Location>()
+            .ForMember(x => x.ExistedFrom, opt =>
+            {
+                opt.PreCondition(x => x.ExistedFromYear != null && x.ExistedFromMonth != null && x.ExistedFromDay != null);
+                opt.MapFrom(x => new DateOnly((int) x.ExistedFromYear!, (int)x.ExistedFromMonth!, (int)x.ExistedFromDay!));
+            })
+            .ForMember(x => x.ExistedTo, opt =>
+            {
+                opt.PreCondition(x => x.ExistedToYear != null && x.ExistedToMonth != null && x.ExistedToDay != null);
+                opt.MapFrom(x => new DateOnly((int)x.ExistedToYear!, (int)x.ExistedToMonth!, (int)x.ExistedToDay!));
+            });
     }
 }

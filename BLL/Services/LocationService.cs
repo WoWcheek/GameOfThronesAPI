@@ -77,8 +77,22 @@ public class LocationService : ILocationService
         existingLocation.Name = dto.Name;
         existingLocation.Picture = dto.Picture;
         existingLocation.LocationTypeId = dto.LocationTypeId;
-        existingLocation.ExistedFrom = dto.ExistedFrom;
-        existingLocation.ExistedTo = dto.ExistedTo;
+
+        if (dto.ExistedFromYear is not null &&
+            dto.ExistedFromMonth is not null &&
+            dto.ExistedFromDay is not null)
+        {
+            existingLocation.ExistedFrom = 
+                new DateOnly((int)dto.ExistedFromYear!, (int)dto.ExistedFromMonth!, (int)dto.ExistedFromDay!);
+        }
+
+        if (dto.ExistedToYear is not null &&
+            dto.ExistedToMonth is not null &&
+            dto.ExistedToDay is not null)
+        {
+            existingLocation.ExistedFrom =
+                new DateOnly((int)dto.ExistedToYear!, (int)dto.ExistedToMonth!, (int)dto.ExistedToDay!);
+        }
 
         await _dbContext.SaveChangesAsync();
 

@@ -8,7 +8,15 @@ public class UpdateLocationDTO
 
     public Guid? LocationTypeId { get; set; }
 
-    public DateOnly? ExistedFrom { get; set; }
+    public int? ExistedFromYear { get; set; }
 
-    public DateOnly? ExistedTo { get; set; }
+    public int? ExistedFromMonth { get; set; }
+
+    public int? ExistedFromDay { get; set; }
+
+    public int? ExistedToYear { get; set; }
+
+    public int? ExistedToMonth { get; set; }
+
+    public int? ExistedToDay { get; set; }
 }
