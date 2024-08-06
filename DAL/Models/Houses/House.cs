@@ -17,5 +17,5 @@ public class House
 
     public virtual Location Location { get; set; } = null!;
 
-    public virtual ICollection<Character> Characters { get; set; } = new List<Character>();
+    public List<Character> Characters { get; set; } = new List<Character>();
 }

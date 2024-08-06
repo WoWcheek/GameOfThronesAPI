@@ -26,7 +26,7 @@ public class Character
 
     public string? Photo { get; set; } = null;
 
-    public virtual ICollection<Guid> PetsId { get; set; } = new List<Guid>();
+    public List<Guid> PetsId { get; set; } = new List<Guid>();
 
-    public virtual ICollection<Pet> Pets { get; set; } = new List<Pet>();
+    public List<Pet> Pets { get; set; } = new List<Pet>();
 }

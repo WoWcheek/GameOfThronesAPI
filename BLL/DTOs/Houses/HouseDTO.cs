@@ -12,5 +12,5 @@ public class HouseDTO
 
     public HouseLocationDTO LocatedAt { get; set; } = null!;
 
-    public virtual ICollection<HouseMemberDTO> Members { get; set; } = new List<HouseMemberDTO>();
+    public List<HouseMemberDTO> Members { get; set; } = new List<HouseMemberDTO>();
 }

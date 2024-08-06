@@ -19,5 +19,5 @@ public class CharacterDTO
 
     public string? Photo { get; set; } = null;
 
-    public virtual ICollection<PetOfCharacterDTO> Pets { get; set; } = new List<PetOfCharacterDTO>();
+    public List<PetOfCharacterDTO> Pets { get; set; } = new List<PetOfCharacterDTO>();
 }

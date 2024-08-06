@@ -1,6 +1,6 @@
-﻿using BLL.DTOs.Locations.Requests;
-using BLL.Interfaces;
+﻿using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using BLL.DTOs.Locations.Requests;
 
 namespace Presentation.Controllers.Locations;
 
