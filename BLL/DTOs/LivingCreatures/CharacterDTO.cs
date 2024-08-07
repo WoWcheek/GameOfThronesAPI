@@ -1,4 +1,5 @@
 ﻿namespace BLL.DTOs.LivingCreatures;
+
 public class CharacterDTO
 {
     public Guid Id { get; set; }
@@ -15,9 +16,9 @@ public class CharacterDTO
 
     public DateOnly DateOfBirth { get; set; }
 
-    public string? Biography { get; set; } = null;
+    public string? Biography { get; set; }
 
-    public string? Photo { get; set; } = null;
+    public string? Photo { get; set; }
 
     public List<PetOfCharacterDTO> Pets { get; set; } = new List<PetOfCharacterDTO>();
 }

@@ -83,5 +83,34 @@ public class AutoMapperProfiles : Profile
                 opt.PreCondition(x => x.YearOfBirth != null && x.MonthOfBirth != null && x.DayOfBirth != null);
                 opt.MapFrom(x => new DateOnly((int)x.YearOfBirth!, (int)x.MonthOfBirth!, (int)x.DayOfBirth!));
             });
+
+        CreateMap<Character, CharacterDTO>()
+            .ForMember(x => x.Gender, opt => opt.MapFrom(x => x.Gender.Name))
+            .ForMember(x => x.House, opt => opt.MapFrom(x => new HouseOfCharacterDTO
+            {
+                Id = x.House.Id,
+                Name = x.House.Name,
+                Motto = x.House.Motto,
+                CrestPicture = x.House.CrestPicture,
+                LocatedAt = new HouseLocationDTO
+                {
+                    Id = x.House.Location.Id,
+                    Name = x.House.Location.Name,
+                    Picture = x.House.Location.Picture
+                }
+            }))
+            .ForMember(x => x.Pets, opt => opt.MapFrom(x => x.Pets.Select(y => new PetOfCharacterDTO
+            {
+                Id = y.Id,
+                Name = y.Name,
+                Type = y.PetType.Name,
+                Gender = y.Gender == null ? null : y.Gender.Name
+            })));
+        CreateMap<AddCharacterDTO, Character>()
+            .ForMember(x => x.DateOfBirth, opt =>
+            {
+                opt.PreCondition(x => x.YearOfBirth != null && x.MonthOfBirth != null && x.DayOfBirth != null);
+                opt.MapFrom(x => new DateOnly((int)x.YearOfBirth!, (int)x.MonthOfBirth!, (int)x.DayOfBirth!));
+            });
     }
 }

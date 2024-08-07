@@ -1,7 +1,6 @@
 ﻿using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using BLL.DTOs.LivingCreatures.Requests;
-using BLL.Services;
 
 namespace Presentation.Controllers.LivingCreatures;
 
