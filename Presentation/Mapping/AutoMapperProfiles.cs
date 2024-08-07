@@ -3,8 +3,11 @@ using BLL.DTOs.Houses;
 using DAL.Models.Houses;
 using BLL.DTOs.Locations;
 using DAL.Models.Locations;
+using BLL.DTOs.LivingCreatures;
 using BLL.DTOs.Houses.Requests;
+using DAL.Models.LivingCreatures;
 using BLL.DTOs.Locations.Requests;
+using BLL.DTOs.LivingCreatures.Requests;
 
 namespace Presentation.Mapping;
 
@@ -54,5 +57,8 @@ public class AutoMapperProfiles : Profile
                     Photo = character.Photo
                 })));
         CreateMap<AddHouseDTO, House>();
+
+        CreateMap<Gender, GenderDTO>();
+        CreateMap<AddGenderDTO, Gender>();
     }
 }
