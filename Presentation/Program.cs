@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IHouseService, HouseService>();
 builder.Services.AddScoped<IGenderService, GenderService>();
+builder.Services.AddScoped<IPetTypeService, PetTypeService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<ILocationTypeService, LocationTypeService>();
 

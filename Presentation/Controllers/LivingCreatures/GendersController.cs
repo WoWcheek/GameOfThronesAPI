@@ -40,9 +40,9 @@ public class GendersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] AddGenderDTO request)
     {
-        var adddedGender = await _genderService.AddAsync(request);
+        var addedGender = await _genderService.AddAsync(request);
 
-        return CreatedAtAction(nameof(GetById), new { id = adddedGender.Id }, adddedGender);
+        return CreatedAtAction(nameof(GetById), new { id = addedGender.Id }, addedGender);
     }
 
     [HttpPut]

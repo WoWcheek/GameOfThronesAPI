@@ -60,5 +60,8 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<Gender, GenderDTO>();
         CreateMap<AddGenderDTO, Gender>();
+
+        CreateMap<PetType, PetTypeDTO>();
+        CreateMap<AddPetTypeDTO, PetType>();
     }
 }
