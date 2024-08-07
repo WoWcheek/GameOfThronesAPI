@@ -63,5 +63,25 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<PetType, PetTypeDTO>();
         CreateMap<AddPetTypeDTO, PetType>();
+
+        CreateMap<Pet, PetDTO>()
+            .ForMember(x => x.Type, opt => opt.MapFrom(x => x.PetType.Name))
+            .ForMember(x => x.Gender, opt => opt.MapFrom(x => x.Gender == null ? null :x.Gender.Name))
+            .ForMember(x => x.Owner, opt => opt.MapFrom(x => x.Gender == null ? null : new PetOwnerDTO
+            {
+                Id = x.Owner!.Id,
+                FirstName = x.Owner!.FirstName,
+                LastName = x.Owner!.LastName,
+                AlsoKnownAs = x.Owner!.AlsoKnownAs,
+                Gender = x.Owner!.Gender.Name,
+                HouseName = x.Owner.House.Name,
+                Photo = x.Owner.Photo
+            }));
+        CreateMap<AddPetDTO, Pet>()
+            .ForMember(x => x.DateOfBirth, opt =>
+            {
+                opt.PreCondition(x => x.YearOfBirth != null && x.MonthOfBirth != null && x.DayOfBirth != null);
+                opt.MapFrom(x => new DateOnly((int)x.YearOfBirth!, (int)x.MonthOfBirth!, (int)x.DayOfBirth!));
+            });
     }
 }

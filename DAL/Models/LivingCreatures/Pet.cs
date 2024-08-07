@@ -12,9 +12,9 @@ public class Pet
 
     public Guid? GenderId { get; set; }
 
-    public virtual Gender? Gender { get; set; } = null!;
+    public virtual Gender? Gender { get; set; }
 
     public DateOnly? DateOfBirth { get; set; }
 
-    public virtual Character Owner { get; set; } = null!;
+    public virtual Character? Owner { get; set; }
 }

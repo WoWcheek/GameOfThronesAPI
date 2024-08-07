@@ -13,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IHouseService, HouseService>();
 builder.Services.AddScoped<IGenderService, GenderService>();
 builder.Services.AddScoped<IPetTypeService, PetTypeService>();

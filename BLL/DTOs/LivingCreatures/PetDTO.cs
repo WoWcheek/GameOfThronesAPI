@@ -12,5 +12,5 @@ public class PetDTO
 
     public DateOnly? DateOfBirth { get; set; }
 
-    public PetOwnerDTO Owner { get; set; } = null!;
+    public PetOwnerDTO? Owner { get; set; }
 }
