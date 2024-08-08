@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using BLL.DTOs.LivingCreatures.Requests;
+using BLL.Exceptions;
 
 namespace Presentation.Controllers.LivingCreatures;
 
@@ -40,23 +41,45 @@ public class PetsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] AddPetDTO request)
     {
-        var addedPet = await _petService.AddAsync(request);
+        try
+        {
+            var addedPet = await _petService.AddAsync(request);
 
-        return CreatedAtAction(nameof(GetById), new { id = addedPet.Id }, addedPet);
+            return CreatedAtAction(nameof(GetById), new { id = addedPet.Id }, addedPet);
+        }
+        catch (ForeignKeyToNonExistentObjectException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return BadRequest("Something went wrong.");
+        }
     }
 
     [HttpPut]
     [Route("{id:Guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdatePetDTO request)
     {
-        var updatedPet = await _petService.UpdateAsync(id, request);
-
-        if (updatedPet is null)
+        try
         {
-            return NotFound();
-        }
+            var updatedPet = await _petService.UpdateAsync(id, request);
 
-        return Ok(updatedPet);
+            if (updatedPet is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedPet);
+        }
+        catch (ForeignKeyToNonExistentObjectException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return BadRequest("Something went wrong.");
+        }
     }
 
     [HttpDelete]

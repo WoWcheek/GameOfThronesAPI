@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using BLL.DTOs.Locations.Requests;
+using BLL.Exceptions;
 
 namespace Presentation.Controllers.Locations;
 
@@ -40,23 +41,45 @@ public class LocationsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] AddLocationDTO request)
     {
-        var addedLocation = await _locationService.AddAsync(request);
+        try
+        {
+            var addedLocation = await _locationService.AddAsync(request);
 
-        return CreatedAtAction(nameof(GetById), new { id = addedLocation.Id }, addedLocation);
+            return CreatedAtAction(nameof(GetById), new { id = addedLocation.Id }, addedLocation);
+        }
+        catch (ForeignKeyToNonExistentObjectException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return BadRequest("Something went wrong.");
+        }
     }
 
     [HttpPut]
     [Route("{id:Guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateLocationDTO request)
     {
-        var updatedLocation = await _locationService.UpdateAsync(id, request);
-
-        if (updatedLocation is null)
+        try
         {
-            return NotFound();
-        }
+            var updatedLocation = await _locationService.UpdateAsync(id, request);
 
-        return Ok(updatedLocation);
+            if (updatedLocation is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedLocation);
+        }
+        catch (ForeignKeyToNonExistentObjectException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return BadRequest("Something went wrong.");
+        }
     }
 
     [HttpDelete]

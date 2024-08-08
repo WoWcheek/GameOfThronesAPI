@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using BLL.DTOs.LivingCreatures.Requests;
+using BLL.Exceptions;
 
 namespace Presentation.Controllers.LivingCreatures;
 
@@ -40,23 +41,45 @@ public class CharactersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] AddCharacterDTO request)
     {
-        var addedCharacter = await _characterService.AddAsync(request);
+        try
+        {
+            var addedCharacter = await _characterService.AddAsync(request);
 
-        return CreatedAtAction(nameof(GetById), new { id = addedCharacter.Id }, addedCharacter);
+            return CreatedAtAction(nameof(GetById), new { id = addedCharacter.Id }, addedCharacter);
+        }
+        catch (ForeignKeyToNonExistentObjectException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return BadRequest("Something went wrong.");
+        }
     }
 
     [HttpPut]
     [Route("{id:Guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCharacterDTO request)
     {
-        var updatedCharacter = await _characterService.UpdateAsync(id, request);
-
-        if (updatedCharacter is null)
+        try
         {
-            return NotFound();
-        }
+            var updatedCharacter = await _characterService.UpdateAsync(id, request);
 
-        return Ok(updatedCharacter);
+            if (updatedCharacter is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedCharacter);
+        }
+        catch (ForeignKeyToNonExistentObjectException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return BadRequest("Something went wrong.");
+        }
     }
 
 

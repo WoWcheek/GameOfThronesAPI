@@ -2,9 +2,9 @@
 using DAL.Storage;
 using BLL.Interfaces;
 using BLL.DTOs.LivingCreatures;
+using DAL.Models.LivingCreatures;
 using Microsoft.EntityFrameworkCore;
 using BLL.DTOs.LivingCreatures.Requests;
-using DAL.Models.LivingCreatures;
 
 namespace BLL.Services;
 
@@ -29,7 +29,7 @@ public class GenderService : IGenderService
         return mappedGenders;
     }
 
-    public async Task<GenderDTO> GetByIdAsync(Guid id)
+    public async Task<GenderDTO?> GetByIdAsync(Guid id)
     {
         var gender = await _dbContext
             .Genders

@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using BLL.DTOs.Houses.Requests;
 using Microsoft.AspNetCore.Mvc;
+using BLL.Exceptions;
 
 namespace Presentation.Controllers.Houses;
 
@@ -40,23 +41,45 @@ public class HousesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] AddHouseDTO request)
     {
-        var addedHouse = await _houseService.AddAsync(request);
+        try
+        {
+            var addedHouse = await _houseService.AddAsync(request);
 
-        return CreatedAtAction(nameof(GetById), new { id = addedHouse.Id }, addedHouse);
+            return CreatedAtAction(nameof(GetById), new { id = addedHouse.Id }, addedHouse);
+        }
+        catch (ForeignKeyToNonExistentObjectException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return BadRequest("Something went wrong.");
+        }
     }
 
     [HttpPut]
     [Route("{id:Guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateHouseDTO request)
     {
-        var updatedHouse = await _houseService.UpdateAsync(id, request);
-
-        if (updatedHouse is null)
+        try
         {
-            return NotFound();
-        }
+            var updatedHouse = await _houseService.UpdateAsync(id, request);
 
-        return Ok(updatedHouse);
+            if (updatedHouse is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedHouse);
+        }
+        catch (ForeignKeyToNonExistentObjectException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return BadRequest("Something went wrong.");
+        }
     }
 
     [HttpDelete]

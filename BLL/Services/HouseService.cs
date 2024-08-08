@@ -5,6 +5,7 @@ using BLL.DTOs.Houses;
 using DAL.Models.Houses;
 using BLL.DTOs.Houses.Requests;
 using Microsoft.EntityFrameworkCore;
+using BLL.Exceptions;
 
 namespace BLL.Services;
 
@@ -31,7 +32,7 @@ public class HouseService : IHouseService
         return mappedHouses;
     }
 
-    public async Task<HouseDTO> GetByIdAsync(Guid id)
+    public async Task<HouseDTO?> GetByIdAsync(Guid id)
     {
         var house = await _dbContext
             .Houses
@@ -51,7 +52,18 @@ public class HouseService : IHouseService
             .Houses
             .AddAsync(house)).Entity;
 
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            if (ex.InnerException?.Message.Contains("LocationId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Location ID", "Location");
+            }
+            throw ex;
+        }
 
         addedHouse = await _dbContext
             .Houses
@@ -79,7 +91,18 @@ public class HouseService : IHouseService
         existingHouse.CrestPicture = dto.CrestPicture;
         existingHouse.LocationId = dto.LocationId;
 
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            if (ex.InnerException?.Message.Contains("LocationId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Location ID", "Location");
+            }
+            throw ex;
+        }
 
         existingHouse = await _dbContext
             .Houses

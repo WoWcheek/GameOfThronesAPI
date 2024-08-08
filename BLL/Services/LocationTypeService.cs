@@ -29,7 +29,7 @@ public class LocationTypeService : ILocationTypeService
         return mappedLocationTypes;
     }
 
-    public async Task<LocationTypeDTO> GetByIdAsync(Guid id)
+    public async Task<LocationTypeDTO?> GetByIdAsync(Guid id)
     {
         var locationType = await _dbContext
             .LocationTypes

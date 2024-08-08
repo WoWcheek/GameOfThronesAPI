@@ -29,7 +29,7 @@ public class PetTypeService : IPetTypeService
         return mappedPetTypes;
     }
 
-    public async Task<PetTypeDTO> GetByIdAsync(Guid id)
+    public async Task<PetTypeDTO?> GetByIdAsync(Guid id)
     {
         var petType = await _dbContext
             .PetTypes

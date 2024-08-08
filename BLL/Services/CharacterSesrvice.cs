@@ -5,7 +5,7 @@ using BLL.DTOs.LivingCreatures;
 using DAL.Models.LivingCreatures;
 using Microsoft.EntityFrameworkCore;
 using BLL.DTOs.LivingCreatures.Requests;
-using DAL.Models.Houses;
+using BLL.Exceptions;
 
 namespace BLL.Services;
 
@@ -38,7 +38,7 @@ public class CharacterSesrvice : ICharacterService
         return mappedCharacters;
     }
 
-    public async Task<CharacterDTO> GetByIdAsync(Guid id)
+    public async Task<CharacterDTO?> GetByIdAsync(Guid id)
     {
         var character = await _dbContext
             .Characters
@@ -64,7 +64,26 @@ public class CharacterSesrvice : ICharacterService
             .Characters
             .AddAsync(character)).Entity;
 
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            if (ex.InnerException?.Message.Contains("GenderId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Gender ID", "Gender");
+            }
+            if (ex.InnerException?.Message.Contains("HouseId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("House ID", "House");
+            }
+            if (ex.InnerException?.Message.Contains("PetId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Pet ID", "Pet");
+            }
+            throw ex;
+        }
 
         addedCharacter = await _dbContext
             .Characters
@@ -110,7 +129,26 @@ public class CharacterSesrvice : ICharacterService
                 new DateOnly((int)dto.YearOfBirth!, (int)dto.MonthOfBirth!, (int)dto.DayOfBirth!);
         }
 
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            if (ex.InnerException?.Message.Contains("GenderId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Gender ID", "Gender");
+            }
+            if (ex.InnerException?.Message.Contains("HouseId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("House ID", "House");
+            }
+            if (ex.InnerException?.Message.Contains("PetId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Pet ID", "Pet");
+            }
+            throw ex;
+        }
 
         existingCharacter = await _dbContext
             .Characters

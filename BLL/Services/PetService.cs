@@ -5,6 +5,7 @@ using BLL.DTOs.LivingCreatures;
 using DAL.Models.LivingCreatures;
 using Microsoft.EntityFrameworkCore;
 using BLL.DTOs.LivingCreatures.Requests;
+using BLL.Exceptions;
 
 namespace BLL.Services;
 
@@ -35,7 +36,7 @@ public class PetService : IPetService
         return mappedPets;
     }
 
-    public async Task<PetDTO> GetByIdAsync(Guid id)
+    public async Task<PetDTO?> GetByIdAsync(Guid id)
     {
         var pet = await _dbContext
             .Pets
@@ -59,7 +60,22 @@ public class PetService : IPetService
             .Pets
             .AddAsync(pet)).Entity;
 
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            if (ex.InnerException?.Message.Contains("PetTypeId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Pet type ID", "Pet type");
+            }
+            if (ex.InnerException?.Message.Contains("GenderId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Gender ID", "Gender");
+            }
+            throw ex;
+        }
 
         addedPet = await _dbContext
             .Pets
@@ -98,7 +114,22 @@ public class PetService : IPetService
                 new DateOnly((int)dto.YearOfBirth!, (int)dto.MonthOfBirth!, (int)dto.DayOfBirth!);
         }
 
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            if (ex.InnerException?.Message.Contains("PetTypeId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Pet type ID", "Pet type");
+            }
+            if (ex.InnerException?.Message.Contains("GenderId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Gender ID", "Gender");
+            }
+            throw ex;
+        }
 
         existingPet = await _dbContext
             .Pets

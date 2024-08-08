@@ -2,9 +2,10 @@
 using DAL.Storage;
 using BLL.Interfaces;
 using BLL.DTOs.Locations;
+using DAL.Models.Locations;
 using BLL.DTOs.Locations.Requests;
 using Microsoft.EntityFrameworkCore;
-using DAL.Models.Locations;
+using BLL.Exceptions;
 
 namespace BLL.Services;
 
@@ -31,7 +32,7 @@ public class LocationService : ILocationService
         return mappedLocations;
     }
 
-    public async Task<LocationDTO> GetByIdAsync(Guid id)
+    public async Task<LocationDTO?> GetByIdAsync(Guid id)
     {
         var location = await _dbContext
             .Locations
@@ -51,7 +52,18 @@ public class LocationService : ILocationService
             .Locations
             .AddAsync(location)).Entity;
 
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            if (ex.InnerException?.Message.Contains("LocationTypeId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Location type ID", "Location type");
+            }
+            throw ex;
+        }
 
         addedLocation = await _dbContext
             .Locations
@@ -82,7 +94,7 @@ public class LocationService : ILocationService
             dto.ExistedFromMonth is not null &&
             dto.ExistedFromDay is not null)
         {
-            existingLocation.ExistedFrom = 
+            existingLocation.ExistedFrom =
                 new DateOnly((int)dto.ExistedFromYear!, (int)dto.ExistedFromMonth!, (int)dto.ExistedFromDay!);
         }
 
@@ -94,7 +106,18 @@ public class LocationService : ILocationService
                 new DateOnly((int)dto.ExistedToYear!, (int)dto.ExistedToMonth!, (int)dto.ExistedToDay!);
         }
 
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            if (ex.InnerException?.Message.Contains("LocationTypeId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Location type ID", "Location type");
+            }
+            throw ex;
+        }
 
         existingLocation = await _dbContext
             .Locations
