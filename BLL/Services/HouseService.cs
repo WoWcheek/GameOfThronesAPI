@@ -26,6 +26,7 @@ public class HouseService : IHouseService
             .Houses
             .Include(x => x.Location)
             .Include(x => x.Characters)
+            .ThenInclude(x => x.Gender)
             .ToListAsync();
 
         var mappedHouses = _mapper.Map<List<HouseDTO>>(houses);
@@ -38,6 +39,7 @@ public class HouseService : IHouseService
             .Houses
             .Include(x => x.Location)
             .Include(x => x.Characters)
+            .ThenInclude(x => x.Gender)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         var mappedHouse = _mapper.Map<HouseDTO>(house);
@@ -69,6 +71,7 @@ public class HouseService : IHouseService
             .Houses
             .Include(x => x.Location)
             .Include(x => x.Characters)
+            .ThenInclude(x => x.Gender)
             .FirstOrDefaultAsync(x => x.Id == addedHouse.Id);
 
         var mappedHouse = _mapper.Map<HouseDTO>(addedHouse);
@@ -108,6 +111,7 @@ public class HouseService : IHouseService
             .Houses
             .Include(x => x.Location)
             .Include(x => x.Characters)
+            .ThenInclude(x => x.Gender)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         var mappedHouse = _mapper.Map<HouseDTO>(existingHouse);
@@ -120,6 +124,7 @@ public class HouseService : IHouseService
             .Houses
             .Include(x => x.Location)
             .Include(x => x.Characters)
+            .ThenInclude(x => x.Gender)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (existingHouse is null)

@@ -46,7 +46,7 @@ public class AutoMapperProfiles : Profile
                     Name = x.Location.Name,
                     Picture = x.Location.Picture
                 }))
-            .ForMember(x => x.Members, opt => opt.MapFrom(x => 
+            .ForMember(x => x.Members, opt => opt.MapFrom(x =>
                 x.Characters.Select(character => new HouseMemberDTO
                 {
                     Id = character.Id,
@@ -66,7 +66,7 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<Pet, PetDTO>()
             .ForMember(x => x.Type, opt => opt.MapFrom(x => x.PetType.Name))
-            .ForMember(x => x.Gender, opt => opt.MapFrom(x => x.Gender == null ? null :x.Gender.Name))
+            .ForMember(x => x.Gender, opt => opt.MapFrom(x => x.Gender == null ? null : x.Gender.Name))
             .ForMember(x => x.Owner, opt => opt.MapFrom(x => x.Gender == null ? null : new PetOwnerDTO
             {
                 Id = x.Owner!.Id,
