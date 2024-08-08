@@ -18,7 +18,7 @@ builder.Services.AddScoped<IHouseService, HouseService>();
 builder.Services.AddScoped<IGenderService, GenderService>();
 builder.Services.AddScoped<IPetTypeService, PetTypeService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
-builder.Services.AddScoped<ICharacterService, CharacterSesrvice>();
+builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<ILocationTypeService, LocationTypeService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));

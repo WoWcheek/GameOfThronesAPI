@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using DAL.Storage;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using BLL.DTOs.Locations;
 using DAL.Models.Locations;
 using BLL.DTOs.Locations.Requests;
 using Microsoft.EntityFrameworkCore;
-using BLL.Exceptions;
 
 namespace BLL.Services;
 
@@ -46,7 +46,20 @@ public class LocationService : ILocationService
 
     public async Task<LocationDTO> AddAsync(AddLocationDTO dto)
     {
-        var location = _mapper.Map<Location>(dto);
+        Location location;
+
+        try
+        {
+            location = _mapper.Map<Location>(dto);
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message.Contains("un-representable DateTime"))
+            {
+                throw new InvalidDateException();
+            }
+            throw ex;
+        }
 
         var addedLocation = (await _dbContext
             .Locations
@@ -94,16 +107,38 @@ public class LocationService : ILocationService
             dto.ExistedFromMonth is not null &&
             dto.ExistedFromDay is not null)
         {
-            existingLocation.ExistedFrom =
-                new DateOnly((int)dto.ExistedFromYear!, (int)dto.ExistedFromMonth!, (int)dto.ExistedFromDay!);
+            try
+            {
+                existingLocation.ExistedFrom =
+                    new DateOnly((int)dto.ExistedFromYear!, (int)dto.ExistedFromMonth!, (int)dto.ExistedFromDay!);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("un-representable DateTime"))
+                {
+                    throw new InvalidDateException("Existed from");
+                }
+                throw ex;
+            }
         }
 
         if (dto.ExistedToYear is not null &&
             dto.ExistedToMonth is not null &&
             dto.ExistedToDay is not null)
         {
-            existingLocation.ExistedFrom =
-                new DateOnly((int)dto.ExistedToYear!, (int)dto.ExistedToMonth!, (int)dto.ExistedToDay!);
+            try
+            {
+                existingLocation.ExistedTo =
+                    new DateOnly((int)dto.ExistedToYear!, (int)dto.ExistedToMonth!, (int)dto.ExistedToDay!);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("un-representable DateTime"))
+                {
+                    throw new InvalidDateException("Existed to");
+                }
+                throw ex;
+            }
         }
 
         try

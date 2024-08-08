@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using DAL.Storage;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using BLL.DTOs.LivingCreatures;
 using DAL.Models.LivingCreatures;
 using Microsoft.EntityFrameworkCore;
 using BLL.DTOs.LivingCreatures.Requests;
-using BLL.Exceptions;
 
 namespace BLL.Services;
 
@@ -54,7 +54,20 @@ public class PetService : IPetService
 
     public async Task<PetDTO> AddAsync(AddPetDTO dto)
     {
-        var pet = _mapper.Map<Pet>(dto);
+        Pet pet;
+
+        try
+        {
+            pet = _mapper.Map<Pet>(dto);
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message.Contains("un-representable DateTime"))
+            {
+                throw new InvalidDateException("Date of birth");
+            }
+            throw ex;
+        }
 
         var addedPet = (await _dbContext
             .Pets
@@ -110,8 +123,19 @@ public class PetService : IPetService
             dto.MonthOfBirth is not null &&
             dto.DayOfBirth is not null)
         {
-            existingPet.DateOfBirth =
-                new DateOnly((int)dto.YearOfBirth!, (int)dto.MonthOfBirth!, (int)dto.DayOfBirth!);
+            try
+            {
+                existingPet.DateOfBirth =
+                    new DateOnly((int)dto.YearOfBirth!, (int)dto.MonthOfBirth!, (int)dto.DayOfBirth!);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("un-representable DateTime"))
+                {
+                    throw new InvalidDateException("Date of birth");
+                }
+                throw ex;
+            }
         }
 
         try

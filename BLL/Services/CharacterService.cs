@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
 using DAL.Storage;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using BLL.DTOs.LivingCreatures;
 using DAL.Models.LivingCreatures;
 using Microsoft.EntityFrameworkCore;
 using BLL.DTOs.LivingCreatures.Requests;
-using BLL.Exceptions;
 
 namespace BLL.Services;
 
-public class CharacterSesrvice : ICharacterService
+public class CharacterService : ICharacterService
 {
     private readonly IMapper _mapper;
     private readonly GoTDBContext _dbContext;
 
-    public CharacterSesrvice(GoTDBContext dbContext, IMapper mapper)
+    public CharacterService(GoTDBContext dbContext, IMapper mapper)
     {
         _mapper = mapper;
         _dbContext = dbContext;
@@ -58,7 +58,20 @@ public class CharacterSesrvice : ICharacterService
 
     public async Task<CharacterDTO> AddAsync(AddCharacterDTO dto)
     {
-        var character = _mapper.Map<Character>(dto);
+        Character character;
+
+        try
+        {
+            character = _mapper.Map<Character>(dto);
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message.Contains("un-representable DateTime"))
+            {
+                throw new InvalidDateException("Date of birth");
+            }
+            throw ex;
+        }
 
         var addedCharacter = (await _dbContext
             .Characters
@@ -125,8 +138,19 @@ public class CharacterSesrvice : ICharacterService
             dto.MonthOfBirth is not null &&
             dto.DayOfBirth is not null)
         {
-            existingCharacter.DateOfBirth =
-                new DateOnly((int)dto.YearOfBirth!, (int)dto.MonthOfBirth!, (int)dto.DayOfBirth!);
+            try
+            {
+                existingCharacter.DateOfBirth =
+                    new DateOnly((int)dto.YearOfBirth!, (int)dto.MonthOfBirth!, (int)dto.DayOfBirth!);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("un-representable DateTime"))
+                {
+                    throw new InvalidDateException("Date of birth");
+                }
+                throw ex;
+            }
         }
 
         try

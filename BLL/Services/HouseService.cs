@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using DAL.Storage;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using BLL.DTOs.Houses;
 using DAL.Models.Houses;
 using BLL.DTOs.Houses.Requests;
 using Microsoft.EntityFrameworkCore;
-using BLL.Exceptions;
 
 namespace BLL.Services;
 

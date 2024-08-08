@@ -1,7 +1,7 @@
-﻿using BLL.Interfaces;
+﻿using BLL.Exceptions;
+using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using BLL.DTOs.LivingCreatures.Requests;
-using BLL.Exceptions;
 
 namespace Presentation.Controllers.LivingCreatures;
 
@@ -51,6 +51,10 @@ public class PetsController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (InvalidDateException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         catch
         {
             return BadRequest("Something went wrong.");
@@ -73,6 +77,10 @@ public class PetsController : ControllerBase
             return Ok(updatedPet);
         }
         catch (ForeignKeyToNonExistentObjectException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (InvalidDateException ex)
         {
             return BadRequest(ex.Message);
         }

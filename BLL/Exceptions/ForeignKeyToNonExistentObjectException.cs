@@ -9,5 +9,5 @@ public class ForeignKeyToNonExistentObjectException : Exception
         : base($"{fieldName} points to non-existent object.") { }
 
     public ForeignKeyToNonExistentObjectException(string fieldName, string objectName)
-        : base($"{fieldName} points to non-existent ${objectName}.") { }
+        : base($"{fieldName} points to non-existent {objectName}.") { }
 }

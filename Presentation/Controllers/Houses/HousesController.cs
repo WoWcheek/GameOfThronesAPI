@@ -1,7 +1,7 @@
-﻿using BLL.Interfaces;
+﻿using BLL.Exceptions;
+using BLL.Interfaces;
 using BLL.DTOs.Houses.Requests;
 using Microsoft.AspNetCore.Mvc;
-using BLL.Exceptions;
 
 namespace Presentation.Controllers.Houses;
 
@@ -51,6 +51,10 @@ public class HousesController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (InvalidDateException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         catch
         {
             return BadRequest("Something went wrong.");
@@ -73,6 +77,10 @@ public class HousesController : ControllerBase
             return Ok(updatedHouse);
         }
         catch (ForeignKeyToNonExistentObjectException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (InvalidDateException ex)
         {
             return BadRequest(ex.Message);
         }
