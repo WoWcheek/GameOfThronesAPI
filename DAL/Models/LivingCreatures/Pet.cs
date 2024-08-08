@@ -16,5 +16,7 @@ public class Pet
 
     public DateOnly? DateOfBirth { get; set; }
 
+    public Guid? OwnerId { get; set; }
+
     public virtual Character? Owner { get; set; }
 }

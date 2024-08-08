@@ -13,4 +13,6 @@ public class UpdatePetDTO
     public int? MonthOfBirth { get; set; }
 
     public int? DayOfBirth { get; set; }
+
+    public Guid? OwnerId { get; set; }
 }

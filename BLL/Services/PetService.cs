@@ -87,6 +87,10 @@ public class PetService : IPetService
             {
                 throw new ForeignKeyToNonExistentObjectException("Gender ID", "Gender");
             }
+            if (ex.InnerException?.Message.Contains("OwnerId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Owner ID", "Owner");
+            }
             throw ex;
         }
 
@@ -118,6 +122,7 @@ public class PetService : IPetService
         existingPet.Name = dto.Name;
         existingPet.PetTypeId = dto.PetTypeId;
         existingPet.GenderId = dto.GenderId;
+        existingPet.OwnerId = dto.OwnerId;
 
         if (dto.YearOfBirth is not null &&
             dto.MonthOfBirth is not null &&
@@ -151,6 +156,10 @@ public class PetService : IPetService
             if (ex.InnerException?.Message.Contains("GenderId") ?? false)
             {
                 throw new ForeignKeyToNonExistentObjectException("Gender ID", "Gender");
+            }
+            if (ex.InnerException?.Message.Contains("OwnerId") ?? false)
+            {
+                throw new ForeignKeyToNonExistentObjectException("Owner ID", "Owner");
             }
             throw ex;
         }

@@ -26,7 +26,5 @@ public class Character
 
     public string? Photo { get; set; }
 
-    public List<Guid> PetsId { get; set; } = new List<Guid>();
-
     public List<Pet> Pets { get; set; } = new List<Pet>();
 }

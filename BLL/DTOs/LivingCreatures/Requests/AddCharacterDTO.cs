@@ -21,6 +21,4 @@ public class AddCharacterDTO
     public string? Biography { get; set; }
 
     public string? Photo { get; set; }
-
-    public List<Guid> PetsId { get; set; } = new List<Guid>();
 }

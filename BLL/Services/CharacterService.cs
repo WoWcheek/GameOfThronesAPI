@@ -91,10 +91,6 @@ public class CharacterService : ICharacterService
             {
                 throw new ForeignKeyToNonExistentObjectException("House ID", "House");
             }
-            if (ex.InnerException?.Message.Contains("PetId") ?? false)
-            {
-                throw new ForeignKeyToNonExistentObjectException("Pet ID", "Pet");
-            }
             throw ex;
         }
 
@@ -132,7 +128,6 @@ public class CharacterService : ICharacterService
         existingCharacter.HouseId = dto.HouseId;
         existingCharacter.Biography = dto.Biography;
         existingCharacter.Photo = dto.Photo;
-        existingCharacter.PetsId = dto.PetsId;
 
         if (dto.YearOfBirth is not null &&
             dto.MonthOfBirth is not null &&
@@ -166,10 +161,6 @@ public class CharacterService : ICharacterService
             if (ex.InnerException?.Message.Contains("HouseId") ?? false)
             {
                 throw new ForeignKeyToNonExistentObjectException("House ID", "House");
-            }
-            if (ex.InnerException?.Message.Contains("PetId") ?? false)
-            {
-                throw new ForeignKeyToNonExistentObjectException("Pet ID", "Pet");
             }
             throw ex;
         }
